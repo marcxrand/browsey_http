@@ -327,7 +327,11 @@ defmodule BrowseyHttp do
     else
       {:error, error_kwlist} ->
         metadata = Enum.join(error_kwlist[:stderr] || [])
-
+        
+        for {key, value} <- error_kwlist do
+          IO.inspect(value, label: to_string(key), limit: :infinity, pretty: true)
+        end
+        
         status =
           case Curl.parse_metadata(metadata, uri) do
             {:error, %Curl.Error{code: code}} -> code
